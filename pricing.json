@@ -1,21 +1,64 @@
 {
-  "version": "1.0.0",
-  "lastUpdated": "2025-09-30T10:00:00Z",
+  "version": "1.1.0",
+  "lastUpdated": "2024-01-15T10:00:00Z",
+  "environment": "production",
+  "currency": "USD",
   "pricing": {
     "basePrices": {
-      "mentorship": {
-        "1": 1000,
-        "2": 2000,
-        "3": 3000,
-        "4": 5000
+      "mentorshipGroup": {
+        "0": {
+          "price": 0,
+          "name": "None",
+          "duration": 0,
+          "description": "No mentorship group access"
+        },
+        "1": {
+          "price": 1000,
+          "name": "Call Recordings Only",
+          "duration": 0,
+          "description": "Access to selected mentorship group call recordings"
+        },
+        "2": {
+          "price": 2000,
+          "name": "Fundamentals (2 months)",
+          "duration": 2,
+          "description": "Mentorship group fundamentals program"
+        },
+        "3": {
+          "price": 3000,
+          "name": "Mastery (6 months)",
+          "duration": 6,
+          "description": "Complete mentorship program with fundamentals included"
+        },
+        "4": {
+          "price": 5000,
+          "name": "Mastery (12 months)",
+          "duration": 12,
+          "description": "Extended mentorship program with fundamentals included"
+        }
       },
-      "accentAnalysis": 200,
-      "oneOnOneCall": 500,
-      "shortCall": 300,
-      "unlimitedAnalyses": 1000
+      "services": {
+        "PAA": {
+          "basePrice": 200,
+          "unlimitedPrice": 1000,
+          "description": "Personal accent analysis and feedback"
+        },
+        "1on1Call50Min": {
+          "basePrice": 500,
+          "unlimitedPrice": 3000,
+          "description": "50-minute one-on-one coaching sessions"
+        },
+        "1on1Call25Min": {
+          "basePrice": 300,
+          "unlimitedPrice": 3000,
+          "description": "25-minute quick coaching sessions"
+        }
+      }
     },
-    "durationWeeks": [1, 2, 4, 8, 12],
-    "durationMonths": [1, 2, 3, 6, 12],
+    "durationOptions": {
+      "weeks": [1, 2, 4, 8, 12],
+      "months": [1, 2, 3, 6, 12]
+    },
     "expirationMultipliers": {
       "0": 1.0,
       "1": 1.1,
@@ -27,6 +70,53 @@
       "testimonial": 200,
       "review": 100,
       "referral": 300
+    }
+  },
+  "pricingRules": {
+    "unlimitedDiscounts": {
+      "bothCallsUnlimited": {
+        "description": "When both 50-min and 25-min calls are unlimited",
+        "rules": {
+          "50minPrice": 0,
+          "25minPrice": 3000
+        }
+      },
+      "callsAndPAAUnlimited": {
+        "description": "When calls are unlimited, PAA becomes FREE",
+        "rules": {
+          "paaPrice": 0
+        }
+      }
+    },
+    "mentorshipBonuses": {
+      "fundamentalsIncluded": {
+        "description": "Mastery programs include Fundamentals for FREE",
+        "appliesTo": [3, 4],
+        "bonus": "fundamentals_free"
+      },
+      "callRecordingsIncluded": {
+        "description": "All mentorship access includes call recordings for FREE",
+        "appliesTo": [2, 3, 4],
+        "bonus": "call_recordings_free"
+      }
+    }
+  },
+  "validation": {
+    "incompatibleCombinations": [
+      {
+        "condition": "serviceFrequency === 'flexible' && hasUnlimitedServices",
+        "action": "prevent",
+        "message": "Flexible scheduling not available with unlimited services"
+      }
+    ],
+    "minimums": {
+      "totalOrder": 0,
+      "mentorshipAccess": 0
+    },
+    "maximums": {
+      "accentAnalyses": 6,
+      "oneOnOneCalls": 6,
+      "shortCalls": 6
     }
   }
 }
